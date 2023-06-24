@@ -31,7 +31,7 @@ struct CustomerData {
 
 // output
 #[derive(Serialize)]
-struct ApiResponseData {
+pub struct ResponseStatus {
     pub status_code: u8,
     pub status_description: String,
 }
@@ -100,12 +100,7 @@ async fn add_bank(bank_data: web::Json<BankData>, data: web::Data<Pool>) -> impl
 
     let response_data = db_layer::create_bank(&data, bank_name.to_string(), _country.to_string());
 
-    let api_response_data: ApiResponseData = ApiResponseData {
-        status_code: response_data.status_code,
-        status_description: response_data.status_description,
-    };
-
-    web::Json(api_response_data)
+    web::Json(response_data)
 }
 
 #[post("/addbranch")]
@@ -116,12 +111,7 @@ async fn add_branch(branch_data: web::Json<BranchData>, data: web::Data<Pool>) -
     let response_data =
         db_layer::create_branch(&data, branch_name.to_string(), _location.to_string());
 
-    let api_response_data: ApiResponseData = ApiResponseData {
-        status_code: response_data.status_code,
-        status_description: response_data.status_description,
-    };
-
-    web::Json(api_response_data)
+    web::Json(response_data)
 }
 
 #[post("/addteller")]
@@ -132,12 +122,7 @@ async fn add_teller(teller_data: web::Json<TellerData>, data: web::Data<Pool>) -
     let response_data =
         db_layer::create_teller(&data, teller_name.to_string(), branch_name.to_string());
 
-    let api_response_data: ApiResponseData = ApiResponseData {
-        status_code: response_data.status_code,
-        status_description: response_data.status_description,
-    };
-
-    web::Json(api_response_data)
+    web::Json(response_data)
 }
 
 #[post("/addcustomer")]
@@ -151,12 +136,7 @@ async fn add_customer(
     let response_data =
         db_layer::create_customer(&data, customer_name.to_string(), branch_name.to_string());
 
-    let api_response_data: ApiResponseData = ApiResponseData {
-        status_code: response_data.status_code,
-        status_description: response_data.status_description,
-    };
-
-    web::Json(api_response_data)
+    web::Json(response_data)
 }
 
 #[get("/getbank")]

@@ -4,17 +4,12 @@ use crate::BranchDetails;
 use crate::BranchResponseData;
 use crate::CustomerDetails;
 use crate::CustomerResponseData;
+use crate::ResponseStatus;
 use crate::TellerDetails;
 use crate::TellerResponseData;
 use actix_web::web;
 use mysql::prelude::*;
 use mysql::*;
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct ResponseStatus {
-    pub status_code: u8,
-    pub status_description: String,
-}
 
 pub fn create_bank(data: &web::Data<Pool>, bank_name: String, _country: String) -> ResponseStatus {
     let my_status_code: u8 = 1;
