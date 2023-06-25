@@ -18,27 +18,62 @@ The RESTful Actix Web API has below listed dependencies:
 - [MySQL](https://github.com/mysql/mysql-server) MySQL database server
 - [mysql](https://github.com/blackbeam/rust-mysql-simple) MySql database driver
 
-## Running The RESTful Actix Web API
+## Instructions
 
-First, open the terminal and clone the project using `git` (or you can simply download the project) and then change the directory:
+### NOTE:
 
-```Rust
-git clone https://github.com/lastemp/mysql.git
-cd mysql
-```
+You may need to ensure that you are running the commands with the correct MySQL user/password.
 
-```MySQL
-Open folder "mysql\sql" that contains the SQL files to create the tables in your local MySQL database server.
-Please ensure you execute the SQL statements found in the files in your MySQL database server.
-```
+1. Access MySQL Server
 
-```Config file
-Open file "xxx" located in path "mysql\xxx" and then 
-change the configurations to match the credentials of your MySQL database server.
-```
+   Log in to the MySQL Server using a user account that has the CREATE DATABASE privilege.
 
-Once you are inside the project directory, run the application:
+2. Create database
 
-```Rust
-cargo run
-```
+   ```sql
+   CREATE DATABASE my_bank;
+   ```
+
+3. Create tables in the database
+
+   Directory "mysql\sql" contains below listed ".sql" files:
+   - bankdetails.sql
+   - branch_details.sql
+   - teller_details.sql
+   - customer_details.sql
+
+   Copy the contents of each of the ".sql" and execute them separately on MySQL Server. This will create four tables in the database.
+
+4. Update `.env` file:
+
+   ```ini
+   SERVER_ADDR=127.0.0.1:8080
+   MYSQL_USER=XXX
+   MYSQL_PASSWORD=XXX
+   MYSQL_HOST=127.0.0.1
+   MYSQL_PORT=3306
+   MYSQL_DBNAME=my_bank
+   ```
+   
+   Update "MYSQL_USER" and "MYSQL_PASSWORD" with the correct MySQL user/password.
+
+5. Run the server:
+
+   ```shell
+   cargo run
+   ```
+
+6. Using a different terminal send an HTTP GET/POST requests to the running server:
+
+   Directory "mysql\apis" contains below listed api's files:
+   - addbank.txt
+   - addbranch.txt
+   - addteller.txt
+   - addcustomer.txt
+   - getbank.txt
+   - getbranch.txt
+   - getteller.txt
+   - getcustomer.txt
+
+   Copy the curl request on each of the ".txt" and execute them separately on separate terminal. Each ".txt" contains the curl request and expected json reponse data.
+   
