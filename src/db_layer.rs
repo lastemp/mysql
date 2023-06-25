@@ -11,30 +11,37 @@ use actix_web::web;
 use mysql::prelude::*;
 use mysql::*;
 
+const ERROR_MESSAGE: &str = "Error occured during processing, please try again.";
+
 pub fn create_bank(data: &web::Data<Pool>, bank_name: String, _country: String) -> ResponseStatus {
     let my_status_code: u8 = 1;
-    let my_status_description: String =
-        String::from("Error occured during processing, please try again.");
+    let my_status_description: String = ERROR_MESSAGE.to_string();
 
     let mut response_status = ResponseStatus {
         status_code: my_status_code,
         status_description: my_status_description,
     };
 
-    match data
-        .get_conn()
-        .and_then(|mut conn| insert_bank_data(&mut conn, bank_name, _country))
-    {
+    if bank_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Bank name is empty!");
+        return response_status;
+    }
+
+    if _country.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Country is empty!");
+        return response_status;
+    }
+
+    match data.get_conn().and_then(|mut conn| {
+        insert_bank_data(&mut conn, bank_name.to_lowercase(), _country.to_lowercase())
+    }) {
         Ok(x) => {
             if x > 0 {
                 response_status.status_code = 0;
                 response_status.status_description = String::from("Successful");
             }
         }
-        Err(e) => println!(
-            "Failed to open DB connection. create_mpesa_access_token {:?}",
-            e
-        ),
+        Err(e) => println!("Failed to open DB connection. create_bank {:?}", e),
     }
 
     response_status
@@ -46,28 +53,37 @@ pub fn create_branch(
     _location: String,
 ) -> ResponseStatus {
     let my_status_code: u8 = 1;
-    let my_status_description: String =
-        String::from("Error occured during processing, please try again.");
+    let my_status_description: String = ERROR_MESSAGE.to_string();
 
     let mut response_status = ResponseStatus {
         status_code: my_status_code,
         status_description: my_status_description,
     };
 
-    match data
-        .get_conn()
-        .and_then(|mut conn| insert_branch_data(&mut conn, branch_name, _location))
-    {
+    if branch_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Branch name is empty!");
+        return response_status;
+    }
+
+    if _location.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Location is empty!");
+        return response_status;
+    }
+
+    match data.get_conn().and_then(|mut conn| {
+        insert_branch_data(
+            &mut conn,
+            branch_name.to_lowercase(),
+            _location.to_lowercase(),
+        )
+    }) {
         Ok(x) => {
             if x > 0 {
                 response_status.status_code = 0;
                 response_status.status_description = String::from("Successful");
             }
         }
-        Err(e) => println!(
-            "Failed to open DB connection. create_mpesa_access_token {:?}",
-            e
-        ),
+        Err(e) => println!("Failed to open DB connection. create_branch {:?}", e),
     }
 
     response_status
@@ -76,31 +92,40 @@ pub fn create_branch(
 pub fn create_teller(
     data: &web::Data<Pool>,
     teller_name: String,
-    _location: String,
+    branch_name: String,
 ) -> ResponseStatus {
     let my_status_code: u8 = 1;
-    let my_status_description: String =
-        String::from("Error occured during processing, please try again.");
+    let my_status_description: String = ERROR_MESSAGE.to_string();
 
     let mut response_status = ResponseStatus {
         status_code: my_status_code,
         status_description: my_status_description,
     };
 
-    match data
-        .get_conn()
-        .and_then(|mut conn| insert_teller_data(&mut conn, teller_name, _location))
-    {
+    if teller_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Teller name is empty!");
+        return response_status;
+    }
+
+    if branch_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Branch name is empty!");
+        return response_status;
+    }
+
+    match data.get_conn().and_then(|mut conn| {
+        insert_teller_data(
+            &mut conn,
+            teller_name.to_lowercase(),
+            branch_name.to_lowercase(),
+        )
+    }) {
         Ok(x) => {
             if x > 0 {
                 response_status.status_code = 0;
                 response_status.status_description = String::from("Successful");
             }
         }
-        Err(e) => println!(
-            "Failed to open DB connection. create_mpesa_access_token {:?}",
-            e
-        ),
+        Err(e) => println!("Failed to open DB connection. create_teller {:?}", e),
     }
 
     response_status
@@ -109,31 +134,40 @@ pub fn create_teller(
 pub fn create_customer(
     data: &web::Data<Pool>,
     customer_name: String,
-    _location: String,
+    branch_name: String,
 ) -> ResponseStatus {
     let my_status_code: u8 = 1;
-    let my_status_description: String =
-        String::from("Error occured during processing, please try again.");
+    let my_status_description: String = ERROR_MESSAGE.to_string();
 
     let mut response_status = ResponseStatus {
         status_code: my_status_code,
         status_description: my_status_description,
     };
 
-    match data
-        .get_conn()
-        .and_then(|mut conn| insert_customer_data(&mut conn, customer_name, _location))
-    {
+    if customer_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Customer name is empty!");
+        return response_status;
+    }
+
+    if branch_name.replace(" ", "").trim().len() == 0 {
+        response_status.status_description = String::from("Branch name is empty!");
+        return response_status;
+    }
+
+    match data.get_conn().and_then(|mut conn| {
+        insert_customer_data(
+            &mut conn,
+            customer_name.to_lowercase(),
+            branch_name.to_lowercase(),
+        )
+    }) {
         Ok(x) => {
             if x > 0 {
                 response_status.status_code = 0;
                 response_status.status_description = String::from("Successful");
             }
         }
-        Err(e) => println!(
-            "Failed to open DB connection. create_mpesa_access_token {:?}",
-            e
-        ),
+        Err(e) => println!("Failed to open DB connection. create_customer {:?}", e),
     }
 
     response_status
