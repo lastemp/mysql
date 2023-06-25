@@ -2,7 +2,7 @@
 
 This RESTful Actix Web API examples illustrates how to connect to MySQL database using Mysql client library implemented in rust i.e  MySql database driver
 
-Currently this RESTful API supports: 
+Below APIs are supported: 
 - Add Bank
 - Add Branch
 - Add Teller
@@ -75,5 +75,5 @@ You may need to ensure that you are running the commands with the correct MySQL 
    - getteller.txt
    - getcustomer.txt
 
-   Copy the curl request on each of the ".txt" and execute them separately on separate terminal. Each ".txt" contains the curl request and expected json reponse data.
+   Copy the curl request on each of the ".txt" and execute them on separate terminals. Each ".txt" contains curl request and expected json reponse data.
    
